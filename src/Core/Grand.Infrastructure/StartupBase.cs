@@ -108,9 +108,6 @@ public static class StartupBase
     private static T StartupConfig<T>(this IServiceCollection services, IConfiguration configuration)
         where T : class, new()
     {
-        ArgumentNullException.ThrowIfNull(services);
-        ArgumentNullException.ThrowIfNull(configuration);
-
         var config = configuration.Get<T>() ?? new T();
         services.AddSingleton(config);
         return config;
