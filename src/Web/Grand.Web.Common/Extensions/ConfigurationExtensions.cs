@@ -26,7 +26,7 @@ public static class ConfigurationExtensions
     {
         //Allow non ASCII chars in headers
         var config = new AppConfig();
-        builder.Configuration.GetSection("Application").Bind(config);
+        builder.Configuration.GetSection("Application").Get<AppConfig>();
         if (config.AllowNonAsciiCharInHeaders)
             builder.WebHost.ConfigureKestrel(options =>
             {

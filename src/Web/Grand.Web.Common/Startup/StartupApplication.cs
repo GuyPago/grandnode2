@@ -56,9 +56,7 @@ public class StartupApplication : IStartupApplication
 
     private void RegisterCache(IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        var config = new RedisConfig();
-        configuration.GetSection("Redis").Bind(config);
-
+        var config = configuration.GetSection("Redis").Get<RedisConfig>();
         serviceCollection.AddSingleton<ICacheBase, MemoryCacheBase>();
 
         if (config.RedisPubSubEnabled)

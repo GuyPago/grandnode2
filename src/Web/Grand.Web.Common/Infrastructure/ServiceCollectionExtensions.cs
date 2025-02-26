@@ -93,11 +93,8 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static void AddGrandDataProtection(this IServiceCollection services, IConfiguration configuration)
     {
-        var redisConfig = new RedisConfig();
-        configuration.GetSection("Redis").Bind(redisConfig);
-
-        var azureConfig = new AzureConfig();
-        configuration.GetSection("Azure").Bind(azureConfig);
+        var redisConfig = configuration.GetSection("Redis").Get<RedisConfig>();
+        var azureConfig = configuration.GetSection("Azure").Get<AzureConfig>();
 
         if (redisConfig.PersistKeysToRedis)
         {
@@ -120,8 +117,7 @@ public static class ServiceCollectionExtensions
         }
         else
         {
-            var securityConfig = new SecurityConfig();
-            configuration.GetSection("Security").Bind(securityConfig);
+            var securityConfig = configuration.GetSection("Security").Get<SecurityConfig>();
             var keyPersistenceLocation = string.IsNullOrEmpty(securityConfig.KeyPersistenceLocation)
                 ? "/App_Data/DataProtectionKeys" : securityConfig.KeyPersistenceLocation;
             var dataProtectionKeysFolder = new DirectoryInfo(keyPersistenceLocation);
@@ -137,8 +133,7 @@ public static class ServiceCollectionExtensions
     /// <param name="configuration">Configuration</param>
     public static void AddGrandAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var securityConfig = new SecurityConfig();
-        configuration.GetSection("Security").Bind(securityConfig);
+        var securityConfig = configuration.GetSection("Security").Get<SecurityConfig>();
 
         //set default authentication schemes
         var authenticationBuilder = services.AddAuthentication(options =>
@@ -207,9 +202,7 @@ public static class ServiceCollectionExtensions
         //add view localization
         mvcBuilder.AddViewLocalization();
 
-        var securityConfig = new SecurityConfig();
-        configuration.GetSection("Security").Bind(securityConfig);
-
+        var securityConfig = configuration.GetSection("Security").Get<SecurityConfig>();
         if (securityConfig.EnableRuntimeCompilation) mvcBuilder.AddRazorRuntimeCompilation();
 
         if (securityConfig.UseHsts)
@@ -226,8 +219,7 @@ public static class ServiceCollectionExtensions
                 options.HttpsPort = securityConfig.HttpsRedirectionHttpsPort;
             });
 
-        var appConfig = new AppConfig();
-        configuration.GetSection("Application").Bind(appConfig);
+        var appConfig = configuration.GetSection("Application").Get<AppConfig>();
 
         //use session-based temp data provider
         if (appConfig.UseSessionStateTempDataProvider) mvcBuilder.AddSessionStateTempDataProvider();

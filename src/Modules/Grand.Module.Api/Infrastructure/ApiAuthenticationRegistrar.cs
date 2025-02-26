@@ -16,8 +16,7 @@ public class ApiAuthenticationRegistrar : IAuthenticationBuilder
     {
         builder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {
-            var config = new BackendAPIConfig();
-            configuration.GetSection("BackendAPI").Bind(config);
+            var config = configuration.GetSection("BackendAPI").Get<BackendAPIConfig>();
             options.TokenValidationParameters = new TokenValidationParameters {
                 ValidateIssuer = config.ValidateIssuer,
                 ValidateAudience = config.ValidateAudience,
@@ -63,8 +62,7 @@ public class ApiAuthenticationRegistrar : IAuthenticationBuilder
 
         builder.AddJwtBearer(FrontendAPIConfig.AuthenticationScheme, options =>
         {
-            var config = new FrontendAPIConfig();
-            configuration.GetSection("FrontendAPI").Bind(config);
+            var config = configuration.GetSection("FrontendAPI").Get<FrontendAPIConfig>();
             options.TokenValidationParameters = new TokenValidationParameters {
                 ValidateIssuer = config.ValidateIssuer,
                 ValidateAudience = config.ValidateAudience,

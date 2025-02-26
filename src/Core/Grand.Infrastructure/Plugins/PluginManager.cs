@@ -48,14 +48,12 @@ public static class PluginManager
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static void Load(IMvcCoreBuilder mvcCoreBuilder, IConfiguration configuration, IWebHostEnvironment hostEnvironment)
     {
-        _config = new ExtensionsConfig();
-        configuration.GetSection("Extensions").Bind(_config);
+        _config = configuration.GetSection("Extensions").Get<ExtensionsConfig>();
 
         lock (_synLock)
         {
-            if (mvcCoreBuilder == null)
-                throw new ArgumentNullException(nameof(mvcCoreBuilder));
-
+            ArgumentNullException.ThrowIfNull(mvcCoreBuilder);
+            
             _logger = mvcCoreBuilder.Services.BuildServiceProvider().GetService<ILoggerFactory>()
                 .CreateLogger("PluginManager");
 

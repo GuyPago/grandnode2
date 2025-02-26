@@ -111,8 +111,7 @@ public static class StartupBase
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(configuration);
 
-        var config = new T();
-        configuration.Bind(config);
+        var config = configuration.Get<T>() ?? new T();
         services.AddSingleton(config);
         return config;
     }
@@ -187,8 +186,7 @@ public static class StartupBase
         var mvcCoreBuilder = services.AddMvcCore(options =>
         {
             options.Filters.AddService<ValidationFilter>();
-            var frontConfig = new FrontendAPIConfig();
-            configuration.GetSection("FrontendAPI").Bind(frontConfig);
+            var frontConfig = configuration.GetSection("FrontendAPI").Get<FrontendAPIConfig>();
             if (frontConfig.JsonContentType)
             {
                 options.UseJsonBodyModelBinderProviderInsteadOf<DictionaryModelBinderProvider>();

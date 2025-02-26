@@ -30,8 +30,7 @@ public static class RoslynCompiler
     {
         ArgumentNullException.ThrowIfNull(applicationPartManager);
 
-        var config = new ExtensionsConfig();
-        configuration.GetSection("Extensions").Bind(config);
+        var config = configuration.GetSection("Extensions").Get<ExtensionsConfig>();
 
         if (!config.UseRoslynScripts)
             return;

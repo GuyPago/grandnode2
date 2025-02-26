@@ -22,8 +22,7 @@ public class GrandCommonStartup : IStartupApplication
     /// <param name="configuration">Configuration root of the application</param>
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        var securityConfig = new SecurityConfig();
-        configuration.GetSection("Security").Bind(securityConfig);
+        var securityConfig = configuration.GetSection("Security").Get<SecurityConfig>();
 
         //add settings
         services.AddSettings();

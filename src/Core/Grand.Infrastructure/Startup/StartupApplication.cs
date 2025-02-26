@@ -30,9 +30,7 @@ public class StartupApplication : IStartupApplication
     private void RegisterDataLayer(IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.AddSingleton<IAuditInfoProvider, AuditInfoProvider>();
-
-        var dbConfig = new DatabaseConfig();
-        configuration.GetSection("Database").Bind(dbConfig);
+        var dbConfig = configuration.GetSection("Database").Get<DatabaseConfig>();
 
         var dataProviderSettings = DataSettingsManager.Instance.LoadSettings();
         if (string.IsNullOrEmpty(dataProviderSettings.ConnectionString))

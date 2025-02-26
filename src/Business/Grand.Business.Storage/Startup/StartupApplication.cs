@@ -18,12 +18,10 @@ public class StartupApplication : IStartupApplication
         services.AddScoped<IDownloadService, DownloadService>();
 
         //picture service
-        var azureConfig = new AzureConfig();
-        configuration.GetSection("Azure").Bind(azureConfig);
+        var azureConfig = configuration.GetSection("Azure").Get<AzureConfig>();
         var useAzureBlobStorage = !string.IsNullOrEmpty(azureConfig.AzureBlobStorageConnectionString);
 
-        var amazonConfig = new AmazonConfig();
-        configuration.GetSection("Amazon").Bind(amazonConfig);
+        var amazonConfig = configuration.GetSection("Amazon").Get<AmazonConfig>();
         var useAmazonBlobStorage = !string.IsNullOrEmpty(amazonConfig.AmazonAwsAccessKeyId) &&
                                    !string.IsNullOrEmpty(amazonConfig.AmazonAwsSecretAccessKey) &&
                                    !string.IsNullOrEmpty(amazonConfig.AmazonBucketName) &&
